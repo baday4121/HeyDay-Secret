@@ -10,7 +10,7 @@
 
         <div style="padding: 90px 70px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 600px;">
             <p id="story-text" style="font-size: 58px; line-height: 1.5; color: #1f2937; font-weight: 700; word-wrap: break-word; white-space: pre-wrap; margin: 0;">
-                Isi pesan akan muncul di sini...
+                The message content will appear here...
             </p>
         </div>
 
@@ -79,7 +79,7 @@
             }, 'image/png');
 
         }).catch(err => {
-            alert('Gagal memproses gambar. Error: ' + err);
+            alert('Failed to process the image. Error: ' + err);
             exportArea.style.opacity = '0';
             resetButton(buttonElement, originalContent);
         });

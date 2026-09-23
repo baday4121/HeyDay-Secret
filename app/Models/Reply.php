@@ -15,7 +15,8 @@ class Reply extends Model
         'ip_address', 
         'location', 
         'user_agent', 
-        'is_read'
+        'is_read',
+        'is_archived'
     ];
 
     public function message()

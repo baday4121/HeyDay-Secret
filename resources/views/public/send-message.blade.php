@@ -52,6 +52,14 @@
         </div>
     </div>
 
+    @if(session('profanity_warning'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            alert("⚠️ System Warning:\n\n{{ session('profanity_warning') }}");
+        });
+    </script>
+    @endif
+
     <script>
         document.getElementById('messageInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {

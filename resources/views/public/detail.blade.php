@@ -73,6 +73,14 @@
         </div>
     </div>
 
+    @if(session('profanity_warning'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            alert("⚠️ System Warning:\n\n{{ session('profanity_warning') }}");
+        });
+    </script>
+    @endif
+
     <script>
         function disableReplyButton(form) {
             const btn = form.querySelector('button[type="submit"]');

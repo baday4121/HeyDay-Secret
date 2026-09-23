@@ -22,7 +22,10 @@ class MessageController extends Controller
 
     public function index()
     {
-        $messages = Message::orderBy('created_at', 'desc')->paginate(25);
+        $messages = Message::where('is_archived', false)
+            ->orderBy('created_at', 'desc')
+            ->paginate(25);
+            
         return view('public.send-message', compact('messages'));
     }
 
@@ -53,22 +56,31 @@ class MessageController extends Controller
 
         $location = $this->getLocation($request, $ip);
         $device = $this->getDeviceInfo($request->userAgent());
+        
+        $isProfane = $this->containsProfanity($content);
 
         Message::create([
             'content' => $content,
             'ip_address' => $ip,
             'location' => $location,
-            'user_agent' => $device
+            'user_agent' => $device,
+            'is_archived' => $isProfane
         ]);
 
         $this->telegram->sendNotification('Secret Message', $content, $location, $ip, $device);
+
+        if ($isProfane) {
+            return redirect()->back()->with('profanity_warning', 'Your message was detected as containing a prohibited word. The message has been sent but archived by the owner.');
+        }
 
         return redirect()->back()->with('success', 'Your secret message has been sent successfully!');
     }
 
     public function show($id)
     {
-        $message = Message::with('replies')->findOrFail($id);
+        $message = Message::with(['replies' => function($query) {
+            $query->where('is_archived', false);
+        }])->findOrFail($id);
         
         return view('public.detail', compact('message'));
     }
@@ -104,16 +116,23 @@ class MessageController extends Controller
         $location = $this->getLocation($request, $ip);
         $device = $this->getDeviceInfo($request->userAgent());
 
+        $isProfane = $this->containsProfanity($content);
+
         Reply::create([
             'message_id' => $message->id,
             'content' => $content,
             'ip_address' => $ip,
             'location' => $location,
             'user_agent' => $device,
-            'is_read' => false
+            'is_read' => false,
+            'is_archived' => $isProfane
         ]);
 
         $this->telegram->sendNotification('Anonymous Reply', $content, $location, $ip, $device);
+
+        if ($isProfane) {
+            return back()->with('profanity_warning', 'Your message was detected as containing a prohibited word. The message has been sent but archived by the owner.');
+        }
 
         return back()->with('success', 'Reply has been sent successfully!');
     }
@@ -144,6 +163,46 @@ class MessageController extends Controller
             return back()->with('success', 'Message marked as read!');
         }
         return abort(403, 'Access denied.');
+    }
+
+    private function containsProfanity($text)
+    {
+        $blacklist = [
+            'anjing', 'anjir', 'anjrit', 'anjrit', 'anjay', 'anying', 'asu',
+            'babi', 'bangsat', 'bangke', 'bangkean', 'kampret', 'keparat',
+            'bajingan', 'brengsek', 'bedebah', 'laknat', 'sialan', 'setan',
+            'iblis', 'tai', 'taik', 'tahi', 'tahi ayam', 'tai kucing',
+            'goblok', 'tolol', 'bego', 'dungu', 'bloon', 'bodoh', 'idiot',
+            'oon', 'geblek', 'sinting', 'edan', 'bodo amat',
+            'kontol', 'kntl', 'memek', 'meki', 'pepek', 'peler', 'pentil',
+            'ngentot', 'entot', 'ngentod', 'entod', 'ewe', 'ngewe',
+            'brengsek', 'lonte', 'perek', 'sundal', 'pelacur', 'jalang',
+            'germo', 'jembut', 'burit', 'itil',
+            'banci', 'bencong', 'waria', 'lonte', 'germo',
+            'sundal', 'pelacur', 'jalang', 'pecun',
+            'kampungan', 'sampah', 'sampah masyarakat', 'manusia sampah',
+            'muka tembok', 'muka badak', 'otak udang', 'otak kosong',
+            'tidak berguna', 'gak berguna', 'ga berguna',
+            'brengsek', 'bajingan', 'keparat', 'bangsat',
+            'persetan', 'peduli setan', 'sial', 'sialan',
+            'fuck', 'fucking', 'shit', 'bitch', 'bastard',
+            'asshole', 'dumbass', 'bullshit', 'motherfucker',
+            'selingkuh', 'selingkuhan', 'pelakor', 'pebinor',
+            'perebut laki orang', 'perebut suami orang',
+            'perebut istri orang', 'a n j i n g', 'b a b i', 'b a n g s a t',
+            'k o n t o l', 'm e m e k',
+            'n g e n t o t', 'j a n c o k',
+            'g o b l o k', 't o l o l',
+            'b a j i n g a n', 'b r e n g s e k',
+        ];
+
+        $lowerText = strtolower($text);
+        foreach ($blacklist as $word) {
+            if (str_contains($lowerText, $word)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function getLocation(Request $request, $ip)

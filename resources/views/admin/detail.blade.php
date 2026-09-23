@@ -39,7 +39,12 @@
             
             @forelse($message->replies as $reply)
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 relative overflow-hidden">
-                    <p class="text-xs text-gray-400 mb-2">Anonymous Reply • {{ $reply->created_at->diffForHumans() }}</p>
+                    <p class="text-xs text-gray-400 mb-2">
+                        Anonymous Reply • {{ $reply->created_at->diffForHumans() }}
+                        @if($reply->is_archived)
+                            <span class="ml-2 bg-yellow-100 text-yellow-800 text-[10px] font-bold px-2 py-0.5 rounded">TOXIC</span>
+                        @endif
+                    </p>
                     <p class="text-gray-700 text-sm mb-4 break-words whitespace-pre-line">{{ $reply->content }}</p>
 
                     <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs text-gray-600 font-mono leading-relaxed">
@@ -49,13 +54,22 @@
                         <div><span class="text-gray-400">Device :</span> {{ $reply->user_agent ?? 'N/A' }}</div>
                     </div>
 
-                    <form action="{{ route('reply.destroy', $reply->id) }}" method="POST" class="absolute top-4 right-4" onsubmit="return confirm('Delete this reply?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-bold bg-red-50 hover:bg-red-100 p-2 rounded transition">
-                            Delete
-                        </button>
-                    </form>
+                    <div class="absolute top-4 right-4 flex items-center gap-2">
+                        <form action="{{ route('reply.archive', $reply->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-yellow-600 hover:text-yellow-800 text-xs font-bold bg-yellow-50 hover:bg-yellow-100 p-2 rounded transition">
+                                {{ $reply->is_archived ? 'Unarchive' : 'Archive' }}
+                            </button>
+                        </form>
+
+                        <form action="{{ route('reply.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Delete this reply?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-bold bg-red-50 hover:bg-red-100 p-2 rounded transition">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
                 </div>
             @empty
                 <p class="text-center text-gray-400 text-sm py-4">No replies yet.</p>

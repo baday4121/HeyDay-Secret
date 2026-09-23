@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content', 'is_read', 'ip_address', 'location', 'user_agent'];
+    protected $fillable = ['content', 'is_read', 'is_archived', 'ip_address', 'location', 'user_agent'];
     public function replies()
     {
         return $this->hasMany(Reply::class);

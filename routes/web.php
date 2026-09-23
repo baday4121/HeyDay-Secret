@@ -24,4 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/admin/message/{id}', [AdminController::class, 'showDetail'])->name('admin.message.show');
+    
+    Route::post('/message/{id}/archive', [AdminController::class, 'toggleArchive'])->name('message.archive');
+    Route::post('/reply/{id}/archive', [AdminController::class, 'toggleReplyArchive'])->name('reply.archive');
 });
