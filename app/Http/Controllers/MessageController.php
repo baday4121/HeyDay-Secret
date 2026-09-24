@@ -23,6 +23,9 @@ class MessageController extends Controller
     public function index()
     {
         $messages = Message::where('is_archived', false)
+            ->withCount(['replies' => function ($query) {
+                $query->where('is_archived', false);
+            }])
             ->orderBy('created_at', 'desc')
             ->paginate(25);
             

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ErrorController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [MessageController::class, 'index'])->name('home');
@@ -13,6 +14,8 @@ Route::post('/message/{id}/reply', [MessageController::class, 'storeReply'])->na
 Route::delete('/message/{id}', [MessageController::class, 'destroy'])->name('message.destroy');
 Route::delete('/reply/{id}', [MessageController::class, 'destroyReply'])->name('reply.destroy');
 Route::patch('/message/{id}/read', [MessageController::class, 'markAsRead'])->name('message.read');
+
+Route::get('/error', [ErrorController::class, 'show'])->name('error.errors');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login-baday', [AuthController::class, 'showLoginForm'])->middleware('admin.key')->name('login');

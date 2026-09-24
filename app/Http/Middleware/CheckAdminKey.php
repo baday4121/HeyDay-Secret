@@ -20,6 +20,6 @@ class CheckAdminKey
             return $next($request);
         }
 
-        abort(404);
+        return redirect()->route('error.errors');
     }
 }

@@ -17,6 +17,7 @@ class AdminController extends Controller
 
         if ($status === 'archived-messages') {
             $messages = Message::where('is_archived', true)
+                ->withCount('replies')
                 ->orderBy('created_at', 'desc')
                 ->paginate(25);
         } elseif ($status === 'archived-replies') {
@@ -26,6 +27,7 @@ class AdminController extends Controller
                 ->paginate(25);
         } else {
             $messages = Message::where('is_archived', false)
+                ->withCount('replies')
                 ->orderBy('created_at', 'desc')
                 ->paginate(25);
         }
