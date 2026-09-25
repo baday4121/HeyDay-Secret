@@ -8,9 +8,9 @@
         
         @auth
             <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-gray-500 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full hidden sm:inline-block">
+                <a href="{{ route('dashboard') }}" class="text-xs font-semibold text-gray-500 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full hidden sm:inline-block hover:bg-gray-100 hover:text-blue-600 transition shadow-sm">
                     Admin Mode
-                </span>
+                </a>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">

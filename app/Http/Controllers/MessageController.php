@@ -171,32 +171,11 @@ class MessageController extends Controller
     private function containsProfanity($text)
     {
         $blacklist = [
-            'anjing', 'anjir', 'anjrit', 'anjrit', 'anjay', 'anying', 'asu',
-            'babi', 'bangsat', 'bangke', 'bangkean', 'kampret', 'keparat',
-            'bajingan', 'brengsek', 'bedebah', 'laknat', 'sialan', 'setan',
-            'iblis', 'tai', 'taik', 'tahi', 'tahi ayam', 'tai kucing',
-            'goblok', 'tolol', 'bego', 'dungu', 'bloon', 'bodoh', 'idiot',
-            'oon', 'geblek', 'sinting', 'edan', 'bodo amat',
-            'kontol', 'kntl', 'memek', 'meki', 'pepek', 'peler', 'pentil',
-            'ngentot', 'entot', 'ngentod', 'entod', 'ewe', 'ngewe',
-            'brengsek', 'lonte', 'perek', 'sundal', 'pelacur', 'jalang',
-            'germo', 'jembut', 'burit', 'itil',
-            'banci', 'bencong', 'waria', 'lonte', 'germo',
-            'sundal', 'pelacur', 'jalang', 'pecun',
-            'kampungan', 'sampah', 'sampah masyarakat', 'manusia sampah',
-            'muka tembok', 'muka badak', 'otak udang', 'otak kosong',
-            'tidak berguna', 'gak berguna', 'ga berguna',
-            'brengsek', 'bajingan', 'keparat', 'bangsat',
-            'persetan', 'peduli setan', 'sial', 'sialan',
-            'fuck', 'fucking', 'shit', 'bitch', 'bastard',
-            'asshole', 'dumbass', 'bullshit', 'motherfucker',
-            'selingkuh', 'selingkuhan', 'pelakor', 'pebinor',
-            'perebut laki orang', 'perebut suami orang',
-            'perebut istri orang', 'a n j i n g', 'b a b i', 'b a n g s a t',
-            'k o n t o l', 'm e m e k',
-            'n g e n t o t', 'j a n c o k',
-            'g o b l o k', 't o l o l',
-            'b a j i n g a n', 'b r e n g s e k',
+            'anjing', 'babi', 'bangsat', 'bangke', 'bangkean', 'kampret', 'keparat', 'bajingan', 'brengsek', 'bedebah', 'laknat', 'setan',
+            'iblis', 'goblok', 'tolol', 'bego', 'dungu', 'bloon', 'bodoh', 'idiot', 'oon', 'geblek', 'sinting', 'edan', 'kontol', 'kntl',
+            'memek', 'pepek', 'peler', 'pentil', 'ngentot', 'entot', 'ngentod', 'entod', 'ewe', 'ngewe', 'jembut', 'burit', 'itil',
+            'kampungan', 'sampah', 'sampah masyarakat', 'manusia sampah', 'otak udang', 'otak kosong', 'tidak berguna', 'gak berguna',
+            'ga berguna', 'brengsek', 'bajingan', 'keparat', 'bangsat', 'selingkuh', 'selingkuhan',
         ];
 
         $lowerText = strtolower($text);
